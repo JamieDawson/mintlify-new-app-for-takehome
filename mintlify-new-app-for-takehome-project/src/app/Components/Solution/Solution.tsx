@@ -93,6 +93,7 @@ const Solution: React.FC = () => {
   return (
     <div>
       <canvas ref={canvasRef}></canvas>
+      <br />
       {secretText}
     </div>
   );
