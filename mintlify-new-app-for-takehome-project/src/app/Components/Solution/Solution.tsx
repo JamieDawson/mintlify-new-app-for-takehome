@@ -2,6 +2,14 @@
 
 import React, { useEffect, useRef } from 'react';
 
+function toTwoBitBinary(num: number): string {
+  // Ensure the number is within the 2-bit range (0 to 3)
+  if (num < 0 || num > 3) {
+    throw new Error("Number out of range. Please provide a number between 0 and 3.");
+  }
+  return num.toString(2).padStart(2, '0');
+}
+
 const Solution: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageUrl = 'https://mintlify-assets.b-cdn.net/interview/base64.txt';
@@ -31,7 +39,7 @@ const Solution: React.FC = () => {
 
           const imageData = ctx.getImageData(0, 0, image.width, image.height);
 
-          logPixelCoordinates(imageData, image.width, image.height);
+          getBinaryData(imageData, image.width, image.height);
         };
       } catch (error) {
         console.error(error);
@@ -41,8 +49,9 @@ const Solution: React.FC = () => {
     fetchAndDrawImage();
   }, []);
 
-  const logPixelCoordinates = (imageData: ImageData, width: number, height: number) => {
+  const getBinaryData = (imageData: ImageData, width: number, height: number) => {
     const pixels = imageData.data;
+    const binaryArray: string[] = []; //using normal array instead of useState
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
@@ -52,9 +61,15 @@ const Solution: React.FC = () => {
         const g = pixels[index + 1];
         const b = pixels[index + 2];
 
-        console.log(`Pixel at (x: ${x}, y: ${y}) - R: ${r}, G: ${g}, B: ${b}`);
+        const sum = r + g + b;
+        const sumModFour = sum % 4;
+        const binaryString = toTwoBitBinary(sumModFour);
+
+        binaryArray.push(binaryString);
       }
     }
+
+    console.log(binaryArray); // Output the array to the console for debugging
   };
 
   return (
