@@ -51,7 +51,7 @@ const Solution: React.FC = () => {
 
   const getBinaryData = (imageData: ImageData, width: number, height: number) => {
     const pixels = imageData.data;
-    const binaryArray: string[] = []; //using normal array instead of useState
+    const binaryArray: string[] = []; // Using normal array instead of useState
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
@@ -69,7 +69,24 @@ const Solution: React.FC = () => {
       }
     }
 
-    console.log(binaryArray); // Output the array to the console for debugging
+    binaryArray.splice(0, 4);
+
+    const asciiString = binaryArrayToAscii(binaryArray);
+    console.log(asciiString); 
+  };
+
+  const binaryArrayToAscii = (binaryArray: string[]): string => {
+    const binaryString = binaryArray.join('');
+
+    let asciiString = '';
+    for (let i = 0; i < binaryString.length; i += 8) {
+      const byte = binaryString.slice(i, i + 8);
+      if (byte.length === 8) {
+        const asciiCode = parseInt(byte, 2);
+        asciiString += String.fromCharCode(asciiCode);
+      }
+    }
+    return asciiString;
   };
 
   return (
