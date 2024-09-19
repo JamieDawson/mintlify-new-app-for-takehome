@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState} from 'react';
 
 function toTwoBitBinary(num: number): string {
   // Ensure the number is within the 2-bit range (0 to 3)
@@ -13,6 +13,7 @@ function toTwoBitBinary(num: number): string {
 const Solution: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imageUrl = 'https://mintlify-assets.b-cdn.net/interview/base64.txt';
+  const [secretText, setSecretText] = useState("")
 
   useEffect(() => {
     const fetchAndDrawImage = async () => {
@@ -49,6 +50,20 @@ const Solution: React.FC = () => {
     fetchAndDrawImage();
   }, []);
 
+  const binaryArrayToAscii = (binaryArray: string[]): string => {
+    const binaryString = binaryArray.join('');
+
+    let asciiString = '';
+    for (let i = 0; i < binaryString.length; i += 8) {
+      const byte = binaryString.slice(i, i + 8);
+      if (byte.length === 8) {
+        const asciiCode = parseInt(byte, 2);
+        asciiString += String.fromCharCode(asciiCode);
+      }
+    }
+    return asciiString;
+  };
+
   const getBinaryData = (imageData: ImageData, width: number, height: number) => {
     const pixels = imageData.data;
     const binaryArray: string[] = []; // Using normal array instead of useState
@@ -72,26 +87,13 @@ const Solution: React.FC = () => {
     binaryArray.splice(0, 4);
 
     const asciiString = binaryArrayToAscii(binaryArray);
-    console.log(asciiString); 
-  };
-
-  const binaryArrayToAscii = (binaryArray: string[]): string => {
-    const binaryString = binaryArray.join('');
-
-    let asciiString = '';
-    for (let i = 0; i < binaryString.length; i += 8) {
-      const byte = binaryString.slice(i, i + 8);
-      if (byte.length === 8) {
-        const asciiCode = parseInt(byte, 2);
-        asciiString += String.fromCharCode(asciiCode);
-      }
-    }
-    return asciiString;
+    setSecretText(asciiString); 
   };
 
   return (
     <div>
       <canvas ref={canvasRef}></canvas>
+      {secretText}
     </div>
   );
 };
