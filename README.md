@@ -26,3 +26,7 @@ During the project, I followed a structured approach to ensure a smooth and effi
 ## Challenges and Solutions
 
 One issue I encountered was a crash caused by storing binary data in `binaryArray` using `useState()`. The issue arose due to excessive re-renders caused by frequent updates to the state. To resolve this, I switched to using a standard array and utilized the `push()` method to append items one at a time, avoiding unnecessary re-renders caused by state updates.
+
+## Screenshot of the app running:
+
+![mintlify image](https://github.com/user-attachments/assets/a817ad29-3201-4065-8fa2-af2b37dca975)
